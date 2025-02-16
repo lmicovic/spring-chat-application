@@ -43,9 +43,9 @@ public class Runner implements ApplicationRunner {
 		 
 		 List<User> users = new ArrayList<User>() {
 			 {
-				 add(new User("Pera", "Peric", "peraperic@gmail.com", "Test!123!"));
-				 add(new User("Ana", "Peric", "peraperic@gmail.com", "Test!123!"));
-				 add(new User("Mika", "Anic", "peraperic@gmail.com", "Test!123!"));
+				 add(new User("Pera", "Peric", "peraperic1@gmail.com", "Test!123!"));
+				 add(new User("Ana", "Peric", "peraperic2@gmail.com", "Test!123!"));
+				 add(new User("Mika", "Anic", "peraperic21@gmail.com", "Test!123!"));
 			 }
 		 };
 		 

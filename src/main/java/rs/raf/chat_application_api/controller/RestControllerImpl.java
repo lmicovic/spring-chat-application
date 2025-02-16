@@ -1,9 +1,12 @@
 package rs.raf.chat_application_api.controller;
 
 import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import rs.raf.chat_application_api.service.RestService;
 
+//@Validated
 public abstract class RestControllerImpl<T, ID> implements RestController<T, ID> {
 
 	protected RestService<T, ID> service;
@@ -44,8 +48,10 @@ public abstract class RestControllerImpl<T, ID> implements RestController<T, ID>
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<T> save(@Valid @RequestBody T entity) {
+		
 		T savedEntity = this.service.save(entity);
 		return new ResponseEntity<T>(savedEntity, HttpStatus.OK);
+	
 	}
 	
 	@PutMapping(value =  "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

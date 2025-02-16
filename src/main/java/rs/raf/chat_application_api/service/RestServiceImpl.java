@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
@@ -32,7 +33,7 @@ public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
 	}
 	
 	@Override
-	public T save(T object) {
+	public T save(T object) throws DataIntegrityViolationException {
 		return this.repository.save(object);
 	}
 	

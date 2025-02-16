@@ -1,6 +1,6 @@
 package rs.raf.chat_application_api.model;
 
-import java.io.Serializable;
+import java.io.Serializable;  
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Entity(name = "`user`")
 @Data
@@ -37,9 +38,10 @@ public class User implements Serializable {
 	@NotBlank(message = "Lastname is mandatory")
 	private String lastname;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	@NotBlank(message = "E-mail is mandatory")
 	@Email
+//	@UniqueElements()
 	private String email;
 	
 	@Column(name = "passowrd", nullable = false)

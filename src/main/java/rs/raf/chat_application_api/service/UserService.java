@@ -12,4 +12,13 @@ public class UserService extends RestServiceImpl<User, Long> {
 		super(userRepository);
 	}	
 	
+	/**
+	 * Checks If user with specific Email exists.
+	 * @param email
+	 * @return boolean
+	 */
+	public boolean existsByEmail(String email) {
+		return ((UserRepository)super.repository).existsByEmail(email);
+	}
+	
 }
