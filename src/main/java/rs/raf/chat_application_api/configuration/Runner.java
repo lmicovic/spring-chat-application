@@ -16,9 +16,6 @@ import rs.raf.chat_application_api.service.UserService;
 @Component
 public class Runner implements ApplicationRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
-	
 	private UserService userService;
 	
 	@Autowired

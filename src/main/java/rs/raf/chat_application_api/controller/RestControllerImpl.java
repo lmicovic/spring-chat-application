@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import rs.raf.chat_application_api.service.RestService;
 
-//@Validated
+@Validated
 public abstract class RestControllerImpl<T, ID> implements RestController<T, ID> {
 
 	protected RestService<T, ID> service;

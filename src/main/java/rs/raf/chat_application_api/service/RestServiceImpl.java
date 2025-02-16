@@ -11,7 +11,6 @@ public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
 
 	protected JpaRepository<T, ID> repository;
 	
-	@Autowired
 	public RestServiceImpl(JpaRepository<T, ID> repository) {
 		this.repository = repository;
 	}
