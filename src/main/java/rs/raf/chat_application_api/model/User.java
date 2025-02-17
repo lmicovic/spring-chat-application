@@ -4,16 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -23,7 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.chat_application_api.configuration.enums.UserRole;
 
-@Entity(name = "`user`")
+@Entity(name = "`USERS`")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,7 +58,7 @@ public class User implements Serializable, UserDetails {
 	
 	@Column(name = "passowrd", nullable = false)
 //	@Transient
-	@NotBlank(message = "Password is mandatory")
+//	@NotBlank(message = "Password is mandatory")
 	@JsonIgnore
 //	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
@@ -65,9 +69,51 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
 	
+	/**
+	 * User sentMessages is always null, if you want to get User's all sent messages use findByUserSenderId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserSenderId(Long)} method from MessageRepository.
+	 */
+	@OneToMany(mappedBy = "userSender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
+	@JsonIgnore
+	private Set<Message> sentMessages;
+	
+	/**
+	 * User receivedMessages is always null, if you want to get User received messages use findByUserReceiverId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserReceiverId(Long)} method from MessageRepository.
+	 */
+	@OneToMany(mappedBy = "userReceiver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
+	@JsonIgnore
+	private Set<Message> receivedMessages;
+	
 
 //	private String image;				// add Image later
-//	pricate List<String> chat			// add Chat later
+//	private List<String> chat			// add Chat later
+	
+	/**
+	 * Constructor creates User with following predefined atributes:
+	 * <ul>
+	 * 		<li><b>authorities - </b> predefined User Role is "ROLE_USER"</li>
+	 * </ul>
+	 * 
+	 * @param id
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @param password
+	 */
+	public User(Long id, String firstname, String lastname, String email, String password) {
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+//		this.encriptedPassword = encoder.encode(password);
+		
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+        this.authorities = authorities;
+	}
 	
 	/**
 	 * Constructor creates User with following predefined atributes:
@@ -96,7 +142,7 @@ public class User implements Serializable, UserDetails {
 	
 	/**
 	 * 
-	 * Constructor single USER_ROLE atribute.
+	 * Constructor single USER_ROLE attribute.
 	 * 
 	 * @param firstname
 	 * @param lastname
@@ -138,8 +184,6 @@ public class User implements Serializable, UserDetails {
 		}
 		
 		this.authorities = authorities;
-		
-		
 		
 	}
 	

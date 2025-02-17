@@ -37,7 +37,7 @@ public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
 	}
 	
 	@Override
-	public List<T> saveAll(List<T> objects) {
+	public List<T> saveAll(List<T> objects) throws DataIntegrityViolationException {
 		return this.repository.saveAll(objects);
 	}
 	

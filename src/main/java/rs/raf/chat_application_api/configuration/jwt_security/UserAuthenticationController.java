@@ -42,6 +42,13 @@ public class UserAuthenticationController {
         return "Welcome this endpoint is not secure";
     }
     
+    /**
+     * Authenticates User based on provided AuthRequest Credentials <b>(email, password)</b>.<br>
+     * If user is Authenticated Successfully, then JWT Token is generated for specific User.
+     * 
+     * @param authRequest - User's email and password
+     * @return jwtToken
+     */
     @PostMapping(value = "/generateToken", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
     	

@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
+import rs.raf.chat_application_api.configuration.exception.UnsupportedFunctionException;
 import rs.raf.chat_application_api.service.RestService;
 
 @Validated
-public abstract class RestControllerImpl<T, ID> implements RestController<T, ID> {
+public abstract class RestControllerImpl<T, K, ID> implements RestController<T, K, ID> {
 
 	protected RestService<T, ID> service;
 	
@@ -33,7 +34,7 @@ public abstract class RestControllerImpl<T, ID> implements RestController<T, ID>
 		return new ResponseEntity<List<T>>(entityList, HttpStatus.OK);
 	} 
 	
-	@GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<?> getById(@PathVariable("id") ID id) {
 		
@@ -45,25 +46,58 @@ public abstract class RestControllerImpl<T, ID> implements RestController<T, ID>
 		return new ResponseEntity<T>(entity, HttpStatus.OK);
 	}
 	
+	@Deprecated
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<T> save(@Valid @RequestBody T entity) {
+	public ResponseEntity<?> save(@Valid @RequestBody K entity) {
 		
-		T savedEntity = this.service.save(entity);
-		return new ResponseEntity<T>(savedEntity, HttpStatus.OK);
+		try {
+			throw new UnsupportedFunctionException("RestController#save(K) method is not supported, instead create custom save() method implementation");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+		}
+		
+//		T savedEntity = this.service.save(entity);
+//		return new ResponseEntity<T>(savedEntity, HttpStatus.OK);
 	
 	}
 	
-	@PutMapping(value =  "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Deprecated
+	@PostMapping(value = "/all", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> update(@PathVariable("id") ID id, @Valid @RequestBody T entity) {
-
-		T updatedEntity = this.service.update(entity, id);
-		if(updatedEntity == null) {
-			return new ResponseEntity<String>("Entity is not find with id: " + id, HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> saveAll(@Valid @RequestBody List<K> entities) {
+		
+		try {
+			throw new UnsupportedFunctionException("RestController#saveAll(List<K>) method is not supported, instead create custom saveAll() method implementation");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
 		}
 		
-		return new ResponseEntity<T>(updatedEntity, HttpStatus.OK);
+//		List<T> savedEntities = this.service.saveAll(entities);
+//		return new ResponseEntity<List<T>>(savedEntities, HttpStatus.OK);
+	
+	}
+	
+	@Deprecated
+	@PutMapping(value =  "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public ResponseEntity<?> update(@PathVariable("id") ID id, @Valid @RequestBody K entity) {
+
+		try {
+			throw new UnsupportedFunctionException("RestController#update(K) method is not supported, instead create custom update() method implementation");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+		}
+		
+//		T updatedEntity = this.service.update(entity, id);
+//		if(updatedEntity == null) {
+//			return new ResponseEntity<String>("Entity is not find with id: " + id, HttpStatus.NOT_FOUND);
+//		}
+//		
+//		return new ResponseEntity<T>(updatedEntity, HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

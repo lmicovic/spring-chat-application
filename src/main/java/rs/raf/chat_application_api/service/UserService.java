@@ -28,7 +28,7 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 	@Override
 	public User save(User user) throws DataIntegrityViolationException {
 		user.setPassword(encoder.encode(user.getPassword()));
-		System.err.println(user.getPassword());
+//		System.err.println(user.getPassword());
 		return ((UserRepository)super.repository).save(user);
 	}
 	
@@ -42,6 +42,13 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		
 		
 		return super.saveAll(users);
+	}
+	
+	@Override
+	public User update(User user, Long id) {
+		
+		user.setPassword(encoder.encode(user.getPassword()));
+		return super.update(user, id);
 	}
 	
 	/**

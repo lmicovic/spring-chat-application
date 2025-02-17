@@ -28,7 +28,23 @@ import rs.raf.chat_application_api.service.UserService;
 @EnableMethodSecurity
 public class JwtSecurityConfiguration {
 
-//	@Value(value = "${custom.variables.SpringSecurity.enable: true}")
+	/**
+	 * Variable that specifies if Spring Security Authentication is Enabled/Disabled.<br><br>
+	 * 
+	 * This can be specified in a two places:
+	 * <ul>
+	 * 		<li>default value - Enabled</li>
+	 * 		<li>application.properties file - define this setting custom.variables.SpringSecurity: true or custom.variables.SpringSecurity.enable: false</li>
+	 * 		<li>explicitly in JwtSecurityConfiguration class - by setting enableSpringSecurity = true or false</li>
+	 * </ul>
+	 * 
+	 * <b>Possible values:</b><br>
+	 * <ul>
+	 * 		<li>enableSpringSecurity = true - Enables Spring Security Authentication</li>
+	 * 		<li>enableSpringSecurity = false - Disables Spring Security Authentication</li>
+	 * </ul>
+	 */
+	@Value(value = "${custom.variables.SpringSecurity.enable: true}")
 	private boolean enableSpringSecurity = false;
 	
 	@Autowired

@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
 @Validated
-public interface RestController<T, ID> {
+public interface RestController<T, K, ID> {
 
 	public ResponseEntity<List<T>> getAll();
 	public ResponseEntity<?> getById(ID id);
-	public ResponseEntity<T> save(@Valid T entity);
-	public ResponseEntity<?> update(ID id, @Valid T entity);
+	public ResponseEntity<?> save(@Valid K entity);
+	public ResponseEntity<?> saveAll(@Valid List<K> entities);
+	public ResponseEntity<?> update(ID id, @Valid K entity);
 	public ResponseEntity<?> delete(ID id);
 	
 }
