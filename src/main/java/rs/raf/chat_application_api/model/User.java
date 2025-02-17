@@ -3,30 +3,25 @@ package rs.raf.chat_application_api.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.AssertFalse.List;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import rs.raf.chat_application_api.configuration.enums.UserRole;
 
 @Entity(name = "`user`")
 @Data
@@ -60,6 +55,7 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "passowrd", nullable = false)
 //	@Transient
 	@NotBlank(message = "Password is mandatory")
+	@JsonIgnore
 //	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
 	
@@ -69,54 +65,118 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	@Column(name = "active")
-	private Boolean active;
 
 //	private String image;				// add Image later
 //	pricate List<String> chat			// add Chat later
 	
+	/**
+	 * Constructor creates User with following predefined atributes:
+	 * 
+	 * <ul>
+	 * 		<li><b>authorities - </b> predefined User Role is "ROLE_USER"</li>
+	 * </ul>
+	 * 
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @param password
+	 */
 	public User(String firstname, String lastname, String email, String password) {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
 		this.password = password;
 //		this.encriptedPassword = encoder.encode(password);
-		this.active = true;
 		
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		
         this.authorities = authorities;
 	}
+	
+	/**
+	 * 
+	 * Constructor single USER_ROLE atribute.
+	 * 
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @param password
+	 * @param role
+	 */
+	public User(String firstname, String lastname, String email, String password, UserRole role) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(role.getRoleDescription()));
+		
+		this.authorities = authorities;
+		
+	}
+	
+	/**
+	 * Constructor that accepts USER_ROLES as Array.
+	 * 
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @param password
+	 * @param roles
+	 */
+	public User(String firstname, String lastname, String email, String password, List<UserRole> roles) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		for (UserRole role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getRoleDescription()));
+		}
+		
+		this.authorities = authorities;
+		
+		
+		
+	}
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.authorities;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		return this.email;
 	}
-
+	
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub

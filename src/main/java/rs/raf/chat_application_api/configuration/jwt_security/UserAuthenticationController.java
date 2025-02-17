@@ -16,9 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.service.UserService;
 
+/**
+ * Controller for User Authentication
+ * @author lukam
+ *
+ */
 @RestController
 @RequestMapping("/auth")
-public class UserInfoController {
+public class UserAuthenticationController {
 
     @Autowired
     private UserService userService;
@@ -29,6 +34,9 @@ public class UserInfoController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * Testing route, this route can be called by unauthenticated users.
+     */
     @GetMapping(value = "/welcome", produces = MediaType.TEXT_PLAIN_VALUE)
     public String welcome() {
         return "Welcome this endpoint is not secure";
