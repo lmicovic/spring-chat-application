@@ -1,4 +1,4 @@
-package rs.raf.chat_application_api.controller;
+	package rs.raf.chat_application_api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -141,7 +142,7 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 	 */
 	@PutMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> update(Long id, @RequestBody @Valid UserDTO userDto) {
+	public ResponseEntity<?> update(@PathVariable("userId") Long id, @RequestBody @Valid UserDTO userDto) {
 		
 		// Check if User with specified email exists
 		User findUser = ((UserService)super.service).getById(userDto.getId());
@@ -163,6 +164,20 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		findUser = ((UserService)super.service).update(findUser, findUser.getId());
 
 		return new ResponseEntity<User>(findUser, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/{userId}")
+	@Override
+	public ResponseEntity<?> delete(@PathVariable("userId") Long userId) {
+		
+		try {
+			((UserService)super.service).delete(userId);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("User not find with Id: " + userId, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------------

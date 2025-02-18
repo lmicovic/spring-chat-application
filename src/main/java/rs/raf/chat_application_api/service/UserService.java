@@ -12,12 +12,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
+import rs.raf.chat_application_api.model.Message;
 import rs.raf.chat_application_api.model.User;
+import rs.raf.chat_application_api.repository.MessageRepository;
 import rs.raf.chat_application_api.repository.UserRepository;
 
 @Service
 public class UserService extends RestServiceImpl<User, Long> implements UserDetailsService {
-
+	
+	@Autowired
+	private MessageRepository messageRepository;
+	
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Autowired
@@ -40,7 +46,6 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 //			System.err.println(user.getEncriptedPassword());
 		}
 		
-		
 		return super.saveAll(users);
 	}
 	
@@ -49,6 +54,30 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		
 		user.setPassword(encoder.encode(user.getPassword()));
 		return super.update(user, id);
+	}
+	
+	@Override
+	public void delete(Long userId) throws EntityNotFoundException {
+		
+		// Find User
+		Optional<User> user = ((UserRepository)super.repository).findById(userId);
+		if(user.isEmpty()) {
+			throw new EntityNotFoundException("User not found with id: " + userId);
+		}
+		
+		// Check if User has any Messages
+		List<Message> usersMessages = this.messageRepository.findAllUserMessages(userId);
+		
+		// If user has any message, first delete all his messages
+		if(usersMessages.isEmpty() == false || usersMessages == null) {
+			for (Message usersMessage : usersMessages) {
+				this.messageRepository.delete(usersMessage);
+			}	
+		}
+		
+		// Delete User
+		((UserRepository)super.repository).delete(user.get());
+		
 	}
 	
 	/**

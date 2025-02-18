@@ -9,6 +9,6 @@ public interface RestService <T, ID> {
 	public T save(T object);
 	public List<T> saveAll(List<T> objects);
 	public T update(T object, ID id);
-	public void delete(T object, ID id) throws Exception;
+	public void delete(ID id) throws Exception;
 	
 }

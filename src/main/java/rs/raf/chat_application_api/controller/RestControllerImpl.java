@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
+import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
 import rs.raf.chat_application_api.configuration.exception.UnsupportedFunctionException;
 import rs.raf.chat_application_api.service.RestService;
 
@@ -100,13 +101,17 @@ public abstract class RestControllerImpl<T, K, ID> implements RestController<T, 
 //		return new ResponseEntity<T>(updatedEntity, HttpStatus.OK);
 	}
 	
-	@DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public ResponseEntity<?> delete(@PathVariable("id") ID id) {
 		
-		T entity = this.service.getById(id);
-		if(entity == null) {
+		try {
+			this.service.delete(id);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
 			return new ResponseEntity<String>("Entity is not find with id: " + id, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return new ResponseEntity<String>(HttpStatus.OK);

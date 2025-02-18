@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
+
 public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
 
 	protected JpaRepository<T, ID> repository;
@@ -53,15 +55,15 @@ public abstract class RestServiceImpl<T, ID> implements RestService<T, ID>{
 	}
 	
 	@Override
-	public void delete(T object, ID id) throws Exception {
+	public void delete(ID id) throws EntityNotFoundException {
 		
 		Optional<T> entity = this.repository.findById(id);
 		
 		if(entity.isEmpty()) {			
-			throw new Exception(object.getClass().getSimpleName() + " not found with index: " + id);
+			throw new EntityNotFoundException("Entity not found with index: " + id);
 		}
 		
-		this.repository.delete(object);
+		this.repository.delete(entity.get());
 		
 	}
 	
