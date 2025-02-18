@@ -39,49 +39,36 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 	@GetMapping(value = "/sent-message/{userId}")
 	public ResponseEntity<?> findAllUserSentMessages(@PathVariable("userId") Long userId) {
 		
-		List<Message> userSentMessages = ((MessageService)super.service).findAllUserSentMessages(userId);
-		if(userSentMessages == null) {
-			try {
-				throw new EntityNotFoundException("User does not exist with Id: " + userId);
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}			
+		User user = this.userService.getById(userId);
+		if(user == null) {
+			throw new EntityNotFoundException("User does not exist with id: " + userId);				
 		}
 		
+		List<Message> userSentMessages = ((MessageService)super.service).findAllUserSentMessages(userId);
 		return new ResponseEntity<List<Message>>(userSentMessages, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/received-message/{userId}")
 	public ResponseEntity<?> findAllUserReceivedMessages(@PathVariable("userId") Long userId) {
 		
-		List<Message> userReceivedMessages = ((MessageService)super.service).findAllUserReceivedMessages(userId);
-		if(userReceivedMessages == null) {
-			try {
-				throw new EntityNotFoundException("User does not exist with Id: " + userId);
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
-			
+		User user = this.userService.getById(userId);
+		if(user == null) {
+			throw new EntityNotFoundException("User does not exist with id: " + userId);
 		}
 		
+		List<Message> userReceivedMessages = ((MessageService)super.service).findAllUserReceivedMessages(userId);
 		return new ResponseEntity<List<Message>>(userReceivedMessages, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/all-message/{userId}")
 	public ResponseEntity<?> findAllUserMessages(@PathVariable("userId") Long userId) {
 		
-		List<Message> userMessages = ((MessageService)super.service).findAllUserMessages(userId);
-		if(userMessages == null) {
-			try {
-				throw new EntityNotFoundException("User does not exist with Id: " + userId);
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}			
+		User user = this.userService.getById(userId);
+		if(user == null) {
+			throw new EntityNotFoundException("User does not exist with id: " + userId);	
 		}
 		
+		List<Message> userMessages = ((MessageService)super.service).findAllUserMessages(userId);
 		return new ResponseEntity<List<Message>>(userMessages, HttpStatus.OK);
 	}
 	
@@ -95,20 +82,10 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		
 		// If Message userSender or userReceiver not found 
 		if(userSender == null || messageDto.getUserSender().getId() == null) {
-			try {
-				throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
+			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());	
 		}
-		if(userReceiver == null || messageDto.getUserReceiver().getId() == null) {
-			try {
-				throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}			
+		if(userReceiver == null || messageDto.getUserReceiver().getId() == null) {	
+			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());
 		}
 		
 		// Message save() Validation
@@ -146,12 +123,7 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		
 		Message findMessage = ((MessageService)super.service).getById(messageDto.getId());
 		if(findMessage == null) {
-			try {
-				throw new EntityNotFoundException("Message not found with id: " + messageDto.getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}			
+			throw new EntityNotFoundException("Message not found with id: " + messageDto.getId());		
 		}
 		
 		if(findMessage.getUserSender().getId() != messageDto.getUserSender().getId()) {
@@ -173,22 +145,12 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		}
 		
 		// If Message userSender or userReceiver not found 
-		if(userSender == null || messageDto.getUserSender().getId() == null) {
-			try {
-				throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
+		if(userSender == null || messageDto.getUserSender().getId() == null) {			
+			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());
 		}
 
 		if(userReceiver == null || messageDto.getUserReceiver().getId() == null) {			
-			try {
-				throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
+			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());	
 		}
 		
 		// Message update() validation
@@ -220,13 +182,8 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 
 		// Find Message
 		Message message = ((MessageService)super.service).getById(messageId);
-		if(message == null) {
-			try {
-				new EntityNotFoundException("Message not found with id: " + messageId);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
+		if(message == null) {	
+			new EntityNotFoundException("Message not found with id: " + messageId);
 		}
 		
 		((MessageService)super.service).delete(message.getId());

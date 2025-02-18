@@ -7,7 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // Requirements
 //--------------------------------------------------------
 // Install Lombok - download lombok .jar
-
+// Spring Boot
+// Spring JPA
+// Hibernate
+// H2 Database
+// JWT Token Deserializer
+// Spring Security
+// Spring WebSocket
 //--------------------------------------------------------
 // Guide:
 //--------------------------------------------------------

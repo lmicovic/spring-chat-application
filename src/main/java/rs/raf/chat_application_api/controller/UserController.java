@@ -147,12 +147,7 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		// Check if User with specified email exists
 		User findUser = ((UserService)super.service).getById(userDto.getId());
 		if(findUser == null) {
-			try {
-				throw new EntityNotFoundException("User not found with id: " + userDto.getId());
-			} catch (EntityNotFoundException e) {
-				e.printStackTrace();
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-			}
+			throw new EntityNotFoundException("User not found with id: " + userDto.getId());	
 		}
 		
 		// Update User
@@ -169,14 +164,7 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 	@DeleteMapping(value = "/{userId}")
 	@Override
 	public ResponseEntity<?> delete(@PathVariable("userId") Long userId) {
-		
-		try {
-			((UserService)super.service).delete(userId);
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>("User not find with Id: " + userId, HttpStatus.NOT_FOUND);
-		}
-
+		((UserService)super.service).delete(userId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
@@ -211,6 +199,5 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		
 	}
 	//----------------------------------------------------------------------------------------------------------------------
-	
 	
 }

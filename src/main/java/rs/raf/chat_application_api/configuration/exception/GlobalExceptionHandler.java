@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
 			errors.put(violation.getPropertyPath().toString(), violation.getMessage());
 		}
 		
+		ex.printStackTrace();
 		return new ResponseEntity<Map<String, String>>(errors, HttpStatus.BAD_REQUEST);
 	}
 	
@@ -47,6 +48,7 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
 		
+        ex.printStackTrace();
 		return new ResponseEntity<Map<String, String>>(errors, HttpStatus.BAD_REQUEST);
 	}
 	
@@ -60,9 +62,21 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleJdbcSQLIntegrityConstraintViolationException(DataIntegrityViolationException ex) {
 		String fieldName = extractFieldName(ex.getMessage());
+		ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Field causing violation: " + fieldName);
     }
-
+	
+	/**
+	 * Global EntityNotFoundException exception handler.
+	 * @param ex - EntityNotFoundException exception
+	 * @return	responseEntity
+	 */
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+		ex.printStackTrace();
+		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
 	/**
 	 * Extracts Field Name in Data Base that caused DataIntegrityViolationException Exception.
 	 * 
