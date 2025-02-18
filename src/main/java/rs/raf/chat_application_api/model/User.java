@@ -69,21 +69,21 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	/**
-	 * User sentMessages is always null, if you want to get User's all sent messages use findByUserSenderId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserSenderId(Long)} method from MessageRepository.
-	 */
-	@OneToMany(mappedBy = "userSender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonBackReference
-	@JsonIgnore
-	private Set<Message> sentMessages;
-	
-	/**
-	 * User receivedMessages is always null, if you want to get User received messages use findByUserReceiverId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserReceiverId(Long)} method from MessageRepository.
-	 */
-	@OneToMany(mappedBy = "userReceiver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonBackReference
-	@JsonIgnore
-	private Set<Message> receivedMessages;
+//	/**
+//	 * User sentMessages is always null, if you want to get User's all sent messages use findByUserSenderId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserSenderId(Long)} method from MessageRepository.
+//	 */
+//	@OneToMany(mappedBy = "userSender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JsonBackReference
+//	@JsonIgnore
+//	private Set<Message> sentMessages;
+//	
+//	/**
+//	 * User receivedMessages is always null, if you want to get User received messages use findByUserReceiverId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserReceiverId(Long)} method from MessageRepository.
+//	 */
+//	@OneToMany(mappedBy = "userReceiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JsonBackReference
+//	@JsonIgnore
+//	private Set<Message> receivedMessages;
 	
 
 //	private String image;				// add Image later

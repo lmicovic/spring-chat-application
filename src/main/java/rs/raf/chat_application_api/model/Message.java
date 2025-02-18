@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Entity Class for User's messages.
+ * Entity Class for Message.
  */
 @Entity(name = "messages")
 @Data

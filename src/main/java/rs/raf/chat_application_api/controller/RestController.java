@@ -15,7 +15,7 @@ public interface RestController<T, K, ID> {
 	public ResponseEntity<?> getById(ID id);
 	public ResponseEntity<?> save(@Valid K entity);
 	public ResponseEntity<?> saveAll(@Valid List<K> entities);
-	public ResponseEntity<?> update(ID id, @Valid K entity);
+	public ResponseEntity<?> update(@Valid K entity);
 	public ResponseEntity<?> delete(ID id);
 	
 }

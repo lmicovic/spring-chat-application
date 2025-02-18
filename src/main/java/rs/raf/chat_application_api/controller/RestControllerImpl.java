@@ -84,7 +84,7 @@ public abstract class RestControllerImpl<T, K, ID> implements RestController<T, 
 	@Deprecated
 	@PutMapping(value =  "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> update(@PathVariable("id") ID id, @Valid @RequestBody K entity) {
+	public ResponseEntity<?> update(@Valid @RequestBody K entity) {
 
 		try {
 			throw new UnsupportedFunctionException("RestController#update(K) method is not supported, instead create custom update() method implementation");

@@ -140,9 +140,9 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 	 * @return updatedUser
 	 * @exception {@link rs.raf.chat_application_api.configuration.exception.EntityNotFoundException} - if User with specified UserID is not found in Database
 	 */
-	@PutMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> update(@PathVariable("userId") Long id, @RequestBody @Valid UserDTO userDto) {
+	public ResponseEntity<?> update(@RequestBody @Valid UserDTO userDto) {
 		
 		// Check if User with specified email exists
 		User findUser = ((UserService)super.service).getById(userDto.getId());
