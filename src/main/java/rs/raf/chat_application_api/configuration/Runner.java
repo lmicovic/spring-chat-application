@@ -24,15 +24,13 @@ public class Runner implements ApplicationRunner {
 
 	private UserService userService;
 	private ChatMessageService messageService;
-	private ChatRoomService chatRoomService;
-	private ChatNotificationService chatNotificationService;
+//	private ChatRoomService chatRoomService;
+//	private ChatNotificationService chatNotificationService;
 	
 	@Autowired
-	public Runner(UserService userService, ChatMessageService messageService, ChatRoomService chatRoomService, ChatNotificationService chatNotificationService) {
+	public Runner(UserService userService, ChatMessageService messageService) {
 		this.userService = userService;
 		this.messageService = messageService;
-		this.chatRoomService = chatRoomService;
-		this.chatNotificationService = chatNotificationService;
 	}
 	
 	@Override
@@ -60,32 +58,17 @@ public class Runner implements ApplicationRunner {
 		users.add(user2);
 		users.add(user3);
 		
-		
-		
 		// User1 send Message to User2
-		
-		
 		users = this.userService.saveAll(users);
 		user1 = users.get(0);
 		user2 = users.get(1);
 		user3 = users.get(2);
 		
-		ChatRoom chatRoom = new ChatRoom(user1, user2);
+		this.userService.saveAll(users);
 		
-		System.out.println(chatRoom.getUserSender());
-		System.out.println(chatRoom.getUserReceiver());
+		ChatMessage message1 = new ChatMessage(user1, user2, "Hello!");
+		this.messageService.save(message1);
 		
-		ChatNotification chatNotification = new ChatNotification(user1, user2);
-		this.chatNotificationService.save(chatNotification);
-		
-		chatRoom = this.chatRoomService.save(chatRoom);
-		
-//		ChatMessage message1 = new ChatMessage(user1, user2, "Test hello", chatRoom);
-//		this.messageService.save(message1);
-		
-		
-		
-		 
 	}
 	
 }

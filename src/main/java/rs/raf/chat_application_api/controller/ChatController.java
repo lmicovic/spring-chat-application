@@ -8,6 +8,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
+import rs.raf.chat_application_api.model.ChatMessage;
 import rs.raf.chat_application_api.model.ChatMessageDTO;
 import rs.raf.chat_application_api.model.ErrorMessageDTO;
 import rs.raf.chat_application_api.model.User;
@@ -21,16 +22,16 @@ public class ChatController {
 
 	private SimpMessagingTemplate messagingTemplate;
 	private ChatMessageService chatMessageService;
-	private ChatRoomService chatRoomService;
-	private ChatNotificationService chatNotificationService; 
+//	private ChatRoomService chatRoomService;
+//	private ChatNotificationService chatNotificationService; 
 	private UserService userService;
 	
 	@Autowired
-	public ChatController(SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, ChatRoomService chatRoomService, ChatNotificationService chatNotificationService, UserService userService) {
+	public ChatController(SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, UserService userService) {
 		this.messagingTemplate = messagingTemplate;
 		this.chatMessageService = chatMessageService;
-		this.chatRoomService = chatRoomService;
-		this.chatNotificationService = chatNotificationService;
+//		this.chatRoomService = chatRoomService;
+//		this.chatNotificationService = chatNotificationService;
 		this.userService = userService;
 	}
 
@@ -67,10 +68,27 @@ public class ChatController {
 		}
 		//-------------------------------------------------------------------------------------------
 		
-		
+		//-------------------------------------------------------------------------------------------
+		// [SAVE MESSAGE]
+		//-------------------------------------------------------------------------------------------
+		this.saveMessage(chatMessage, userSender, userReceiver);
+		//-------------------------------------------------------------------------------------------
 		
 		// Reroute ChatMessage to User Receiver
 		messagingTemplate.convertAndSend("/user/client2/queue/messages", chatMessage);
+		
+	}
+	
+	/**
+	 * Saves Message to Database
+	 * @param messageDto
+	 */
+	private void saveMessage(ChatMessageDTO messageDto, User userSender, User userReceiver) {
+		
+		ChatMessage message = messageDto.transform(userSender, userReceiver);
+		message = this.chatMessageService.save(message);
+		
+		System.out.println(message);
 		
 	}
 	
