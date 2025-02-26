@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // JWT Token Deserializer
 // Spring Security
 // Spring WebSocket
+// MapStruct
 //--------------------------------------------------------
 // Guide:
 //--------------------------------------------------------
@@ -63,6 +64,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //
 //
 //--------------------------------------------------------
+
+// [Use External Message Broker]:
+//
+// 		RabitMQ - to manage subscriptions and broadcast messages.
 
 
 @SpringBootApplication

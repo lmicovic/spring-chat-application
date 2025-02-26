@@ -1,31 +1,38 @@
 package rs.raf.chat_application_api.configuration;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
+import rs.raf.chat_application_api.configuration.enums.MessageStatus;
 import rs.raf.chat_application_api.configuration.enums.UserRole;
-import rs.raf.chat_application_api.model.Message;
+import rs.raf.chat_application_api.model.ChatMessage;
+import rs.raf.chat_application_api.model.ChatNotification;
+import rs.raf.chat_application_api.model.ChatRoom;
 import rs.raf.chat_application_api.model.User;
-import rs.raf.chat_application_api.service.MessageService;
+import rs.raf.chat_application_api.service.ChatMessageService;
+import rs.raf.chat_application_api.service.ChatNotificationService;
+import rs.raf.chat_application_api.service.ChatRoomService;
 import rs.raf.chat_application_api.service.UserService;
 
 @Component
 public class Runner implements ApplicationRunner {
 
 	private UserService userService;
-	private MessageService messageService;
+	private ChatMessageService messageService;
+	private ChatRoomService chatRoomService;
+	private ChatNotificationService chatNotificationService;
 	
 	@Autowired
-	public Runner(UserService userService, MessageService messageService) {
+	public Runner(UserService userService, ChatMessageService messageService, ChatRoomService chatRoomService, ChatNotificationService chatNotificationService) {
 		this.userService = userService;
 		this.messageService = messageService;
+		this.chatRoomService = chatRoomService;
+		this.chatNotificationService = chatNotificationService;
 	}
 	
 	@Override
@@ -47,16 +54,37 @@ public class Runner implements ApplicationRunner {
 		User user2 = new User("Ana", "Peric", "peraperic2@gmail.com", "Test!123!", UserRole.ROLE_ADMIN);
 		User user3 = new User("Mika", "Anic", "peraperic21@gmail.com", "Test!123!", userRoles);
 		
-		// User1 send Message to User2
-		Message message1 = new Message(user1, user2, "Test hello");
 		
 		List<User> users = new ArrayList<User>();
 		users.add(user1);
 		users.add(user2);
 		users.add(user3);
-		 
+		
+		
+		
+		// User1 send Message to User2
+		
+		
 		users = this.userService.saveAll(users);
-		this.messageService.save(message1);
+		user1 = users.get(0);
+		user2 = users.get(1);
+		user3 = users.get(2);
+		
+		ChatRoom chatRoom = new ChatRoom(user1, user2);
+		
+		System.out.println(chatRoom.getUserSender());
+		System.out.println(chatRoom.getUserReceiver());
+		
+		ChatNotification chatNotification = new ChatNotification(user1, user2);
+		this.chatNotificationService.save(chatNotification);
+		
+		chatRoom = this.chatRoomService.save(chatRoom);
+		
+//		ChatMessage message1 = new ChatMessage(user1, user2, "Test hello", chatRoom);
+//		this.messageService.save(message1);
+		
+		
+		
 		 
 	}
 	

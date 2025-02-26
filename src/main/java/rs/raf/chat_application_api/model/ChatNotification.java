@@ -1,7 +1,5 @@
 package rs.raf.chat_application_api.model;
 
-import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,45 +8,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Data;
 
 /**
- * Entity Class for Message.
+ * When the server receives a chat message, it doesn’t send it directly to the client, rather, it sends a chat notification, to notify the client there is a new message received, then the client can pull the new message. The message will be marked as delivered once the client pulls the message
  */
-@Entity(name = "messages")
+@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class ChatNotification {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "sender_id", nullable = false)
-	@JsonManagedReference
+	@JoinColumn(name = "sender_id", nullable =  false)
 	private User userSender;
 	
 	@ManyToOne
 	@JoinColumn(name = "receiver_id", nullable =  false)
-	@JsonManagedReference
 	private User userReceiver;
 	
-	@Column(name = "content", nullable = false, length = 250)
-	private String messageContent;
-	
-	@Column(name = "time_created")
-	private LocalDateTime timeCreated;
-	
-	public Message(User userSender, User userReceiver, String messageContent) {
+	public ChatNotification(User userSender, User userReceiver) {
 		this.userSender = userSender;
 		this.userReceiver = userReceiver;
-		this.messageContent = messageContent;
-		this.timeCreated = LocalDateTime.now();
 	}
-	
-	
 	
 }

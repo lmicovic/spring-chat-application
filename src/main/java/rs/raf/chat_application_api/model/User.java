@@ -39,7 +39,7 @@ public class User implements Serializable, UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Setter(AccessLevel.NONE)									// Prevents Lombok to create setter for id.
+//	@Setter(AccessLevel.NONE)									// Prevents Lombok to create setter for id.
 	private Long id;
 	
 	@Column(name = "firstname", nullable = false)

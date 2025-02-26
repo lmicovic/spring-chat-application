@@ -1,8 +1,7 @@
 package rs.raf.chat_application_api.service;
 
-import java.util.List;
+import java.util.List;  
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,18 +10,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
-import rs.raf.chat_application_api.model.Message;
+import rs.raf.chat_application_api.model.ChatMessage;
 import rs.raf.chat_application_api.model.User;
-import rs.raf.chat_application_api.repository.MessageRepository;
+import rs.raf.chat_application_api.repository.ChatMessageRepository;
 import rs.raf.chat_application_api.repository.UserRepository;
 
 @Service
 public class UserService extends RestServiceImpl<User, Long> implements UserDetailsService {
 	
 	@Autowired
-	private MessageRepository messageRepository;
+	private ChatMessageRepository messageRepository;
 	
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -66,11 +64,11 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		}
 		
 		// Check if User has any Messages
-		List<Message> usersMessages = this.messageRepository.findAllUserMessages(userId);
+		List<ChatMessage> usersMessages = this.messageRepository.findAllUserMessages(userId);
 		
 		// If user has any message, first delete all his messages
 		if(usersMessages.isEmpty() == false || usersMessages == null) {
-			for (Message usersMessage : usersMessages) {
+			for (ChatMessage usersMessage : usersMessages) {
 				this.messageRepository.delete(usersMessage);
 			}	
 		}

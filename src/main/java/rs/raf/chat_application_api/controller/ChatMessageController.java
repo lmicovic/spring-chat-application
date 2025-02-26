@@ -2,7 +2,6 @@ package rs.raf.chat_application_api.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,24 +14,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.validation.Valid;
 import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
-import rs.raf.chat_application_api.model.Message;
-import rs.raf.chat_application_api.model.MessageDTO;
+import rs.raf.chat_application_api.model.ChatMessage;
+import rs.raf.chat_application_api.model.ChatMessageDTO;
 import rs.raf.chat_application_api.model.User;
-import rs.raf.chat_application_api.service.MessageService;
+import rs.raf.chat_application_api.service.ChatMessageService;
 import rs.raf.chat_application_api.service.UserService;
 
 @RestController
 @RequestMapping("/message")
-public class MessageController extends RestControllerImpl<Message,MessageDTO, Long>{
+public class ChatMessageController extends RestControllerImpl<ChatMessage, ChatMessageDTO, Long>{
 
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	public MessageController(MessageService messageService) {
+	public ChatMessageController(ChatMessageService messageService) {
 		super(messageService);
 	}
 	
@@ -44,8 +42,8 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 			throw new EntityNotFoundException("User does not exist with id: " + userId);				
 		}
 		
-		List<Message> userSentMessages = ((MessageService)super.service).findAllUserSentMessages(userId);
-		return new ResponseEntity<List<Message>>(userSentMessages, HttpStatus.OK);
+		List<ChatMessage> userSentMessages = ((ChatMessageService)super.service).findAllUserSentMessages(userId);
+		return new ResponseEntity<List<ChatMessage>>(userSentMessages, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/received-message/{userId}")
@@ -56,8 +54,8 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 			throw new EntityNotFoundException("User does not exist with id: " + userId);
 		}
 		
-		List<Message> userReceivedMessages = ((MessageService)super.service).findAllUserReceivedMessages(userId);
-		return new ResponseEntity<List<Message>>(userReceivedMessages, HttpStatus.OK);
+		List<ChatMessage> userReceivedMessages = ((ChatMessageService)super.service).findAllUserReceivedMessages(userId);
+		return new ResponseEntity<List<ChatMessage>>(userReceivedMessages, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/all-message/{userId}")
@@ -68,24 +66,24 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 			throw new EntityNotFoundException("User does not exist with id: " + userId);	
 		}
 		
-		List<Message> userMessages = ((MessageService)super.service).findAllUserMessages(userId);
-		return new ResponseEntity<List<Message>>(userMessages, HttpStatus.OK);
+		List<ChatMessage> userMessages = ((ChatMessageService)super.service).findAllUserMessages(userId);
+		return new ResponseEntity<List<ChatMessage>>(userMessages, HttpStatus.OK);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> save(@RequestBody @Valid MessageDTO messageDto) {
+	public ResponseEntity<?> save(@RequestBody @Valid ChatMessageDTO messageDto) {
 		
 		// Load UserSender and userReceiver
-		User userSender = this.userService.getById(messageDto.getUserSender().getId());
-		User userReceiver = this.userService.getById(messageDto.getUserReceiver().getId());
+		User userSender = this.userService.getById(messageDto.getUserSenderId());
+		User userReceiver = this.userService.getById(messageDto.getUserReceiverId());
 		
 		// If Message userSender or userReceiver not found 
-		if(userSender == null || messageDto.getUserSender().getId() == null) {
-			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());	
+		if(userSender == null || messageDto.getUserSenderId() == null) {
+			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSenderId());	
 		}
-		if(userReceiver == null || messageDto.getUserReceiver().getId() == null) {	
-			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());
+		if(userReceiver == null || messageDto.getUserReceiverId() == null) {	
+			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiverId());
 		}
 		
 		// Message save() Validation
@@ -105,39 +103,39 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		}
 		
 		// Save Message
-		Message message = messageDto.transform(userSender, userReceiver);
-		message.setTimeCreated(LocalDateTime.now());
+		ChatMessage message = messageDto.transform(userSender, userReceiver);
+//		message.setTimeCreated(LocalDateTime.now());
 		
-		message = ((MessageService)super.service).save(message);
+		message = ((ChatMessageService)super.service).save(message);
 		
-		return new ResponseEntity<Message>(message, HttpStatus.OK);
+		return new ResponseEntity<ChatMessage>(message, HttpStatus.OK);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public ResponseEntity<?> update(@RequestBody @Valid MessageDTO messageDto) {
+	public ResponseEntity<?> update(@RequestBody @Valid ChatMessageDTO messageDto) {
 
 		// Load UserSender and userReceiver
-		User userSender = this.userService.getById(messageDto.getUserSender().getId());
-		User userReceiver = this.userService.getById(messageDto.getUserReceiver().getId());
+		User userSender = this.userService.getById(messageDto.getUserSenderId());
+		User userReceiver = this.userService.getById(messageDto.getUserReceiverId());
 		
-		Message findMessage = ((MessageService)super.service).getById(messageDto.getId());
+		ChatMessage findMessage = ((ChatMessageService)super.service).getById(messageDto.getId());
 		if(findMessage == null) {
 			throw new EntityNotFoundException("Message not found with id: " + messageDto.getId());		
 		}
 		
-		if(findMessage.getUserSender().getId() != messageDto.getUserSender().getId()) {
+		if(findMessage.getUserSender().getId() != messageDto.getUserSenderId()) {
 			try {
-				throw new Exception("Can not change message userSender id: " + messageDto.getUserSender().getId());
+				throw new Exception("Can not change message userSender id: " + messageDto.getUserSenderId());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
 			}			
 		}
 		
-		if(findMessage.getUserReceiver().getId() != messageDto.getUserReceiver().getId()) {
+		if(findMessage.getUserReceiver().getId() != messageDto.getUserReceiverId()) {
 			try {
-				throw new Exception("Can not change message userReceiver id: " + messageDto.getUserSender().getId());
+				throw new Exception("Can not change message userReceiver id: " + messageDto.getUserSenderId());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
@@ -145,12 +143,12 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		}
 		
 		// If Message userSender or userReceiver not found 
-		if(userSender == null || messageDto.getUserSender().getId() == null) {			
-			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSender().getId());
+		if(userSender == null || messageDto.getUserSenderId() == null) {			
+			throw new EntityNotFoundException("Message userSender not found with id: " + messageDto.getUserSenderId());
 		}
 
-		if(userReceiver == null || messageDto.getUserReceiver().getId() == null) {			
-			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiver().getId());	
+		if(userReceiver == null || messageDto.getUserReceiverId() == null) {			
+			throw new EntityNotFoundException("Message userReceiver not found with id: " + messageDto.getUserReceiverId());	
 		}
 		
 		// Message update() validation
@@ -170,10 +168,10 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 		}
 		
 		// Update Message
-		Message message = messageDto.transform(userSender, userReceiver);
-		message = ((MessageService)super.service).update(message, message.getId());
+		ChatMessage message = messageDto.transform(userSender, userReceiver);
+		message = ((ChatMessageService)super.service).update(message, message.getId());
 		
-		return new ResponseEntity<Message>(message, HttpStatus.OK);
+		return new ResponseEntity<ChatMessage>(message, HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value = "/{messageId}")
@@ -181,12 +179,12 @@ public class MessageController extends RestControllerImpl<Message,MessageDTO, Lo
 	public ResponseEntity<?> delete(@PathVariable("messageId") Long messageId) {
 
 		// Find Message
-		Message message = ((MessageService)super.service).getById(messageId);
+		ChatMessage message = ((ChatMessageService)super.service).getById(messageId);
 		if(message == null) {	
 			new EntityNotFoundException("Message not found with id: " + messageId);
 		}
 		
-		((MessageService)super.service).delete(message.getId());
+		((ChatMessageService)super.service).delete(message.getId());
 
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
