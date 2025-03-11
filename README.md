@@ -233,3 +233,12 @@ Application is autoconfigured and ready to run.
 		- Run as/ Java Application
 	- Application will be started on the URL: http://localhost:8080/
 
+
+
+------------
+
+
+
+## Contributions
+
+Other contributions are welcome! Feel free to open issues, submit pull requests, or suggest improvements.
