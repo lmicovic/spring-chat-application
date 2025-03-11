@@ -1,5 +1,20 @@
 # Spring Chat Application
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+	- [Spring Security Authentication On-Off](#spring-security-authentication-on-off)
+- [Dependencies](#dependencies)
+- [How to Connect to WebSocket API](#how-to-connect-to-websocket-api)
+	- [Java Clients](#java-clients)
+	- [StandardWebSocketClient vs STOMPWebSocketClient](#standardwebsocketclient-vs-stompwebsocketclient)
+	- [STOMPWebSocketClient](#stompwebsocketclient)
+		- [Destination Subscription](#destination-subscription)
+		- [Message Handling](#message-handling)
+		- [Payload Type](#payload-type)
+		- [Handle Exceptions](#handle-exceptions)
+- [How to run](#how-to-run)
+
 ## Overview
 
 The **Spring Chat Application** is a backend service built with [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html "Java 17") and [Spring Boot](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot/3.4.2 "Spring Boot") (version: 3.4.2) that facilitates real-time communication between users. This application leverages [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API "WebSockets") for private user-to-user chat and incorporates various features to enhance user interaction.
@@ -19,7 +34,7 @@ Application is written in [Eclipse IDE](https://eclipseide.org/ "Eclipse IDE") a
 
 <br>
 
-### Spring Security Authentication On/Off:
+### Spring Security Authentication On-Off:
 Spring Security Authentication can be turned on or of by defining following configuration in: `projectRoot\src\main\resources\application.properties`
 
 - Turn on Spring Security Authentication:
@@ -125,7 +140,7 @@ class ChatSessionHandlerClient1 implements StompSessionHandler {
 ```
 <br>
 
-**Destination Subscription:**
+##### **Destination Subscription:**
 
 Method afterConnected(StompSession, StompHeaders) is triggered after Client is connected to WebSocket API. It is usually used to set subscription for specific WebSocket destination by individual Client.
 ```java
@@ -136,7 +151,7 @@ public void afterConnected(StompSession session, StompHeaders connectedHeaders) 
 ```
 <br>
 
-**Message Handling:**
+##### **Message Handling:**
 
 Method handleFrame(StompHeaders, Object) is used to handle incoming Messages from a STOMP broker.
 ```java
@@ -159,7 +174,7 @@ public void handleFrame(StompHeaders headers, Object payload) {
 ```
 <br>
 
-**Payload Type:**
+##### **Payload Type:**
 
 Method getPayloadType(StompHeaders) is responsible for determining the type of the payload (the Message content) based on the headers of the incoming STOMP message.
 ```java
@@ -179,7 +194,7 @@ public Type getPayloadType(StompHeaders headers) {
 ```
 <br>
 
-**Handle Exceptions:**
+##### **Handle Exceptions:**
 
 Method handleException(StompSession, StompCommand, StompHeaders, byte[], Throwable) is designed to handle exceptions that occur during the processing of STOMP messages.
  ```java
@@ -206,7 +221,7 @@ This section will describe how to run application using [Eclispe IDE](https://ec
 		
 1. Run Application in Eclise IDE:
 Application is autoconfigured and ready to run.
-	- Import project to Eclipse IDE workspace.
+	- Import project to E workspace.
 	- Run Application by:
 		- Right Click on Application.java file in workspace tree from Eclipse IDE.
 		- Run as/ Java Application
