@@ -17,18 +17,16 @@ Application is written in [Eclipse IDE](https://eclipseide.org/ "Eclipse IDE") a
 - **Media Sharing**: Send images and files as messages.
 - **Advance Logging:** application containts advance logging (applicaton.log, connected_users.log, subscribed_users.log, messages.log and console). Logs are stored at following path: `projectRoot\logs`
 
-
+<br>
 
 ### Spring Security Authentication On/Off:
 Spring Security Authentication can be turned on or of by defining following configuration in: `projectRoot\src\main\resources\application.properties`
 
-- Turn on Spring Security Authentication:<br>
+- Turn on Spring Security Authentication:
 `custom.variables.SpringSecurity.enable: true`
 
-- Turn off Spring Security Authentication:<br>
+- Turn off Spring Security Authentication:
 `custom.variables.SpringSecurity.enable: false`
-
-<br>
 
 ## Dependencies
 
@@ -195,3 +193,22 @@ public void handleException(StompSession session, StompCommand command, StompHea
 
 
 ## How to run:
+This section will describe how to run application using [Eclispe IDE](https://eclipseide.org/ "Eclispe IDE").
+
+1. Clone Project from GitHub Repository:
+	- Open Terminal and type:
+	`git clone https://github.com/lmicovic/spring-chat-application`
+	
+1. Install Lombok library on the PC:
+	- Download Lombok library from: https://projectlombok.org/download
+	- Install Lombok library:
+		- Click on downloaded lombok.jar file and install.
+		
+1. Run Application in Eclise IDE:
+Application is autoconfigured and ready to run.
+	- Import project to Eclipse IDE workspace.
+	- Run Application by:
+		- Right Click on Application.java file in workspace tree from Eclipse IDE.
+		- Run as/ Java Application
+	- Application will be started on the URL: http://localhost:8080/
+
