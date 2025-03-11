@@ -211,7 +211,7 @@ public void handleException(StompSession session, StompCommand command, StompHea
 This section will describe how to run application using [Eclispe IDE](https://eclipseide.org/ "Eclispe IDE").
 
 1. Clone Project from GitHub Repository:
-	- Open Terminal and type:
+	- Open Terminal and type:<br>
 	`git clone https://github.com/lmicovic/spring-chat-application`
 	
 1. Install Lombok library on the PC:
