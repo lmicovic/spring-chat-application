@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [Overview](#overview)
+	- [Frontend Application](#frontend-application)
 - [Features](#features)
 	- [Spring Security Authentication On-Off](#spring-security-authentication-on-off)
 - [Dependencies](#dependencies)
@@ -20,6 +21,11 @@
 The **Spring Chat Application** is a backend service built with [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html "Java 17") and [Spring Boot](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot/3.4.2 "Spring Boot") (version: 3.4.2) that facilitates real-time communication between users. This application leverages [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API "WebSockets") for private user-to-user chat and incorporates various features to enhance user interaction.
 
 Application is written in [Eclipse IDE](https://eclipseide.org/ "Eclipse IDE") as [Maven](https://www.simplilearn.com/tutorials/maven-tutorial/maven-project-in-eclipse "Maven") Project.
+
+<br>
+
+#### Frontend Application
+Frontend Application is implemented in [JavaScript](https://www.w3schools.com/js/ "JavaScript") and [Angular17](https://angular.dev/ "Angular17") Framework and can be found at this link: https://github.com/lmicovic/angular-chat-application
 
 ## Features
 
@@ -211,7 +217,7 @@ public void handleException(StompSession session, StompCommand command, StompHea
 This section will describe how to run application using [Eclispe IDE](https://eclipseide.org/ "Eclispe IDE").
 
 1. Clone Project from GitHub Repository:
-	- Open Terminal and type:<br>
+	- Open Terminal and type:
 	`git clone https://github.com/lmicovic/spring-chat-application`
 	
 1. Install Lombok library on the PC:
