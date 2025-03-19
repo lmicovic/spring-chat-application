@@ -1,8 +1,6 @@
 package rs.raf.chat_application_api.model;
-
-import java.time.LocalDateTime;
+ 
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.raf.chat_application_api.configuration.enums.MessageStatus;
 
 /**
  * Entity Class for Message.
@@ -62,23 +59,23 @@ public class ChatMessage {
 //		this.chatRoom = new ChatRoom(userSender, userReceiver);
 	}
 	
-	public ChatMessage(User userSender, User userReceiver, String messageContent, ChatRoom chatRoom) {
-		this.userSender = userSender;
-		this.userReceiver = userReceiver;
-		this.messageContent = messageContent;
-		this.timeCreated = new Date();
-//		this.messageStatus = MessageStatus.RECEIVED;
-//		this.chatRoom = chatRoom;
-	}
+//	public ChatMessage(User userSender, User userReceiver, String messageContent, ChatRoom chatRoom) {
+//		this.userSender = userSender;
+//		this.userReceiver = userReceiver;
+//		this.messageContent = messageContent;
+//		this.timeCreated = new Date();
+////		this.messageStatus = MessageStatus.RECEIVED;
+////		this.chatRoom = chatRoom;
+//	}
 	
-	public ChatMessage(User userSender, User userReceiver, String messageContent, MessageStatus messageStatus, ChatRoom chatRoom) {
-		this.userSender = userSender;
-		this.userReceiver = userReceiver;
-		this.messageContent = messageContent;
-		this.timeCreated = new Date();
-//		this.messageStatus = messageStatus;
-//		this.chatRoom = chatRoom;
-	}
+//	public ChatMessage(User userSender, User userReceiver, String messageContent, MessageStatus messageStatus, ChatRoom chatRoom) {
+//		this.userSender = userSender;
+//		this.userReceiver = userReceiver;
+//		this.messageContent = messageContent;
+//		this.timeCreated = new Date();
+////		this.messageStatus = messageStatus;
+////		this.chatRoom = chatRoom;
+//	}
 	
 	
 	

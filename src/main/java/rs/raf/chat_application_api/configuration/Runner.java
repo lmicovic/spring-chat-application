@@ -1,22 +1,15 @@
 package rs.raf.chat_application_api.configuration;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import rs.raf.chat_application_api.configuration.enums.MessageStatus;
 import rs.raf.chat_application_api.configuration.enums.UserRole;
 import rs.raf.chat_application_api.model.ChatMessage;
-import rs.raf.chat_application_api.model.ChatNotification;
-import rs.raf.chat_application_api.model.ChatRoom;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.service.ChatMessageService;
-import rs.raf.chat_application_api.service.ChatNotificationService;
-import rs.raf.chat_application_api.service.ChatRoomService;
 import rs.raf.chat_application_api.service.UserService;
 
 @Component

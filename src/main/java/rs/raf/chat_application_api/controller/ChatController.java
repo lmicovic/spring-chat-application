@@ -1,20 +1,17 @@
 package rs.raf.chat_application_api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.bind.annotation.RestController;
-
 import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
 import rs.raf.chat_application_api.model.ChatMessage;
 import rs.raf.chat_application_api.model.ChatMessageDTO;
 import rs.raf.chat_application_api.model.ErrorMessageDTO;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.service.ChatMessageService;
-import rs.raf.chat_application_api.service.ChatNotificationService;
-import rs.raf.chat_application_api.service.ChatRoomService;
 import rs.raf.chat_application_api.service.UserService;
 
 @RestController

@@ -1,8 +1,7 @@
 package rs.raf.chat_application_api.configuration.websocket.client;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Type; 
 import java.util.List;
-
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;

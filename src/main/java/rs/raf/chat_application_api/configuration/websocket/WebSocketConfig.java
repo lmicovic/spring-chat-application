@@ -43,7 +43,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {			 
 		registry.addEndpoint("ws")													// This specifies a URL endpoint (in this case, /ws) that clients will use to initiate a WebSocket connection to Server			
-				.setAllowedOrigins("*");												// This	is used to configure CORS Settings for the registered WebSocket endpoint. "*" means that all origins are allowed to connect to the WebSocket endpoint
+				.setAllowedOrigins("*");											// This	is used to configure CORS Settings for the registered WebSocket endpoint. "*" means that all origins are allowed to connect to the WebSocket endpoint
 //				.withSockJS();														// Enables SockJS support for a registered WebSocket endpoint, so that alternative messaging options may be used if WebSockets are not available
 	}
 	

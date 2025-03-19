@@ -1,13 +1,11 @@
 package rs.raf.chat_application_api.model;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 import java.time.LocalDateTime;
 import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.raf.chat_application_api.configuration.enums.MessageStatus;
 import rs.raf.chat_application_api.configuration.exception.UnsupportedFunctionException;
 
 /**

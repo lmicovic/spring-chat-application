@@ -31,7 +31,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //
 //	
 //	
-//	3) GenerateToken:		utl: localhost:8080/auth/generateToken
+//	3) GenerateToken:		url: localhost:8080/auth/generateToken
 //
 //		// This route is used for User Authentication
 //		// This route is not protected by Spring Boot Authentication, so any one can call it.
