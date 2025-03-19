@@ -52,9 +52,9 @@ public class UserAuthenticationController {
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
     	
     	// Check If Email exists
-//    	if(userService.existsByEmail(authRequest.getEmail()) == false) {
-//    		return new ResponseEntity<String>("Wrong Email", HttpStatus.UNAUTHORIZED);
-//    	}
+    	if(userService.existsByEmail(authRequest.getEmail()) == false) {
+    		return new ResponseEntity<String>("Wrong Email", HttpStatus.UNAUTHORIZED);
+    	}
     	
     	// Check Password
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
