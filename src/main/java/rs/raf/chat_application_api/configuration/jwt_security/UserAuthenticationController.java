@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.service.UserService;
 
@@ -53,9 +52,9 @@ public class UserAuthenticationController {
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
     	
     	// Check If Email exists
-    	if(userService.existsByEmail(authRequest.getEmail()) == false) {
-    		return new ResponseEntity<String>("Wrong Email", HttpStatus.UNAUTHORIZED);
-    	}
+//    	if(userService.existsByEmail(authRequest.getEmail()) == false) {
+//    		return new ResponseEntity<String>("Wrong Email", HttpStatus.UNAUTHORIZED);
+//    	}
     	
     	// Check Password
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
@@ -63,6 +62,7 @@ public class UserAuthenticationController {
     	try {
     		authentication = authenticationManager.authenticate(authenticationToken);
 		} catch (BadCredentialsException e) {
+//			e.printStackTrace();
 			return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
 		}
     	

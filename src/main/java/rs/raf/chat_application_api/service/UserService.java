@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,16 +24,14 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 	private ChatMessageRepository messageRepository;
 	
 	private PasswordEncoder encoder = new BCryptPasswordEncoder();
-
-	@Autowired
-	public UserService(UserRepository userRepository) {
-		super(userRepository);
-	}	
+	
+	public UserService(JpaRepository<User, Long> repository) {
+		super(repository);
+	}
 	
 	@Override
 	public User save(User user) throws DataIntegrityViolationException {
 		user.setPassword(encoder.encode(user.getPassword()));
-//		System.err.println(user.getPassword());
 		return ((UserRepository)super.repository).save(user);
 	}
 	
@@ -40,8 +39,7 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 	public List<User> saveAll(List<User> users) {
 		
 		for (User user : users) {
-			user.setPassword(encoder.encode(user.getPassword()));
-//			System.err.println(user.getEncriptedPassword());
+			user.setPassword(encoder.encode(user.getPassword()));	
 		}
 		
 		return super.saveAll(users);
@@ -106,5 +104,6 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		
 		return userDetails;
 	}
+	
 	
 }

@@ -57,7 +57,7 @@ public class Runner implements ApplicationRunner {
 		user2 = users.get(1);
 		user3 = users.get(2);
 		
-		this.userService.saveAll(users);
+		
 		
 		ChatMessage message1 = new ChatMessage(user1, user2, "Hello!");
 		this.messageService.save(message1);

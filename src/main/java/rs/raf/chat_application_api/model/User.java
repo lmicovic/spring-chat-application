@@ -35,11 +35,8 @@ public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 7757961288363404234L;
 	
-//	private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Setter(AccessLevel.NONE)									// Prevents Lombok to create setter for id.
 	private Long id;
 	
 	@Column(name = "firstname", nullable = false)
@@ -53,7 +50,6 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "email", nullable = false, unique = true)
 	@NotBlank(message = "E-mail is mandatory")
 	@Email
-//	@UniqueElements()
 	private String email;
 	
 	@Column(name = "passowrd", nullable = false)
@@ -63,31 +59,8 @@ public class User implements Serializable, UserDetails {
 //	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
 	
-//	@Column(name = "encriptedPassword")
-//	private String encriptedPassword;
-	
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
-	
-//	/**
-//	 * User sentMessages is always null, if you want to get User's all sent messages use findByUserSenderId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserSenderId(Long)} method from MessageRepository.
-//	 */
-//	@OneToMany(mappedBy = "userSender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	@JsonBackReference
-//	@JsonIgnore
-//	private Set<Message> sentMessages;
-//	
-//	/**
-//	 * User receivedMessages is always null, if you want to get User received messages use findByUserReceiverId() {@link rs.raf.chat_application_api.repository.MessageRepository#findByUserReceiverId(Long)} method from MessageRepository.
-//	 */
-//	@OneToMany(mappedBy = "userReceiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	@JsonBackReference
-//	@JsonIgnore
-//	private Set<Message> receivedMessages;
-	
-
-//	private String image;				// add Image later
-//	private List<String> chat			// add Chat later
 	
 	/**
 	 * Constructor creates User with following predefined atributes:
@@ -107,7 +80,6 @@ public class User implements Serializable, UserDetails {
 		this.lastname = lastname;
 		this.email = email;
 		this.password = password;
-//		this.encriptedPassword = encoder.encode(password);
 		
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -132,7 +104,6 @@ public class User implements Serializable, UserDetails {
 		this.lastname = lastname;
 		this.email = email;
 		this.password = password;
-//		this.encriptedPassword = encoder.encode(password);
 		
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -187,7 +158,6 @@ public class User implements Serializable, UserDetails {
 		
 	}
 	
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.authorities;

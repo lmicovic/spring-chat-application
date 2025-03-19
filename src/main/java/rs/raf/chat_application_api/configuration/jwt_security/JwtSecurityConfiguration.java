@@ -50,25 +50,13 @@ public class JwtSecurityConfiguration {
 	@Autowired
 	private JwtAuthFilter authFilter;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	// User Creation
 	@Bean
-	public UserService userDetailsService(UserRepository userRepository) {
-		
-		//------------------------------------------------------
-		// [ERROR!!!!!]
-		//------------------------------------------------------
-		if(userRepository == null) {
-			try {
-				throw new NullPointerException("UserRepository userRepository is null");
-			} catch (Exception e) {
-				System.err.println("[CUSTOM ERROR]");
-				e.printStackTrace();
-				System.exit(0);
-			}
-		}
-		//------------------------------------------------------
-		
-		return new UserService(userRepository);
+	public UserService userDetailsService() {	
+		return new UserService(this.userRepository);
 	}
 	
 	
@@ -100,7 +88,7 @@ public class JwtSecurityConfiguration {
 //                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/user/**",  "/movie/**").authenticated())
 //                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/admin/**").authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider(userRepository))
+                .authenticationProvider(this.authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 
                 // Enable h2-console in Spring Security on URL: /h2-console
@@ -125,9 +113,9 @@ public class JwtSecurityConfiguration {
 	}
 
 	@Bean
-	public AuthenticationProvider authenticationProvider(UserRepository userRepository) {
+	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(this.userDetailsService(userRepository));
+		authenticationProvider.setUserDetailsService(this.userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
 		return authenticationProvider;
 	}
