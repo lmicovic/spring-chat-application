@@ -20,6 +20,7 @@ import rs.raf.chat_application_api.configuration.enums.UserRole;
 import rs.raf.chat_application_api.configuration.exception.EntityExistException;
 import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
 import rs.raf.chat_application_api.configuration.exception.UnsupportedFunctionException;
+import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.model.UserDTO;
 import rs.raf.chat_application_api.service.UserService;
@@ -33,10 +34,31 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		super(userService);
 	}
 	
-	@GetMapping(value = "/email/{email}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/check-email/{email}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> existsByEmail(@PathVariable("email") String email) {		
 		boolean exists = ((UserService)super.service).existsByEmail(email);
 		return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+		
+		User user = ((UserService)this.service).findUserByEmail(email);
+		
+		System.out.println(user);
+		
+		if(user == null) {
+			try {
+				throw new UserNotFoundException("User not found with email: " + email);
+			} catch (UserNotFoundException e) {
+				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			}
+			
+		}
+		
+		UserDTO userDto = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword());
+				
+		return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/user-save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

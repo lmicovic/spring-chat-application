@@ -18,8 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	public void addCorsMappings(CorsRegistry registry) {
 		
-		System.out.println(this.enableCorsFilter);
-		
 		if(this.enableCorsFilter == false) {						
 			// Disable CORS Policy			
 			registry.addMapping("/**")					
