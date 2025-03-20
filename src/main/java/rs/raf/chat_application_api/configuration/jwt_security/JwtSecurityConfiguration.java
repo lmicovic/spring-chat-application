@@ -83,7 +83,7 @@ public class JwtSecurityConfiguration {
 
     	return http.csrf(csrf -> csrf.disable())
         		
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**", "/auth/welcome", "/auth/generateToken").permitAll())		// URL Does not need Authorizaton
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/h2-console/**", "/auth/welcome", "/auth/generateToken", "/auth/signin", "/email-exists/{email}").permitAll())		// URL Does not need Authorizaton
                 .authorizeHttpRequests((auth) -> auth.anyRequest().authenticated())																					// All Other URLS need Authorization
 //                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/user/**",  "/movie/**").authenticated())
 //                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/admin/**").authenticated())

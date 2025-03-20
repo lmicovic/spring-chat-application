@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.raf.chat_application_api.model.User;
+import rs.raf.chat_application_api.model.UserDTO;
 import rs.raf.chat_application_api.service.UserService;
 
 /**
@@ -77,5 +78,23 @@ public class UserAuthenticationController {
         }
         
     }
-
+    
+    @PostMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
+    	
+    	
+    	User user = new User(userDTO.getFirstname(), userDTO.getLastname(), userDTO.getEmail(), userDTO.getPassword());
+    	user = this.userService.save(user);
+    	
+    	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword());
+    	
+    	return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/email-exists/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> emailExists(@PathVariable("email") String email) {
+    	boolean exists = this.userService.existsByEmail(email);
+    	return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
+    }
+    
 }
