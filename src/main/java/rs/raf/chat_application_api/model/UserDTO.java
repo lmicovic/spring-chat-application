@@ -1,6 +1,9 @@
 package rs.raf.chat_application_api.model;
 
-import java.io.Serializable;
+import java.io.Serializable; 
+import java.util.Collection;
+import java.util.Date;
+import org.springframework.security.core.GrantedAuthority;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -34,6 +37,31 @@ public class UserDTO implements Serializable{
 	@NotBlank(message = "Passsword is mandatory")
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
+	
+	private Collection<? extends GrantedAuthority> authorities;
+	
+	private Boolean isOnline;
+	
+	private Date lastOnline;
+	
+	public UserDTO(Long id, String firstname, String lastname, String email, String password) {
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+	}
+	
+	public UserDTO(Long id, String firstname, String lastname, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.isOnline = false;
+		this.lastOnline = new Date();
+		this.authorities = authorities;
+	}
 	
 	/**
 	 * Used to create User object from UserDTO object

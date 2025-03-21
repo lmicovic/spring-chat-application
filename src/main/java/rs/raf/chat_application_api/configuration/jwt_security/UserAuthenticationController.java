@@ -86,7 +86,7 @@ public class UserAuthenticationController {
     	User user = new User(userDTO.getFirstname(), userDTO.getLastname(), userDTO.getEmail(), userDTO.getPassword());
     	user = this.userService.save(user);
     	
-    	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword());
+    	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());
     	
     	return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
     }

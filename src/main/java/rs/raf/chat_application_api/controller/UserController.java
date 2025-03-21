@@ -61,6 +61,30 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/current-user/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getCurrentLoginUser(@PathVariable String email) {
+		
+		User user = ((UserService)this.service).findUserByEmail(email);
+		
+		System.out.println(user);
+		
+		if(user == null) {
+			try {
+				throw new UserNotFoundException("User not found with email: " + email);
+			} catch (UserNotFoundException e) {
+				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			}
+			
+		}
+		
+		user.setIsOnline(true);
+		((UserService)super.service).update(user, user.getId());
+		
+		UserDTO userDto = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());
+		
+		return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/user-save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveUser(@RequestBody @Valid UserDTO userDto) {
 		

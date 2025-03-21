@@ -3,6 +3,7 @@ package rs.raf.chat_application_api.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
@@ -62,6 +63,13 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
 	
+	@Column(name = "isOnline")
+	private Boolean isOnline;
+	
+	@Column(name =  "lastOnline")
+	private Date lastOnline;
+	
+	
 	/**
 	 * Constructor creates User with following predefined atributes:
 	 * <ul>
@@ -85,6 +93,8 @@ public class User implements Serializable, UserDetails {
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		
         this.authorities = authorities;
+        this.isOnline = false;
+        this.lastOnline = new Date();
 	}
 	
 	/**
@@ -109,7 +119,10 @@ public class User implements Serializable, UserDetails {
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		
         this.authorities = authorities;
+        this.isOnline = false;
+        this.lastOnline = new Date();
 	}
+	
 	
 	/**
 	 * 
@@ -131,6 +144,8 @@ public class User implements Serializable, UserDetails {
 		authorities.add(new SimpleGrantedAuthority(role.getRoleDescription()));
 		
 		this.authorities = authorities;
+		this.isOnline = false;
+		this.lastOnline = new Date();
 		
 	}
 	
@@ -155,6 +170,8 @@ public class User implements Serializable, UserDetails {
 		}
 		
 		this.authorities = authorities;
+		this.isOnline = false;
+		this.lastOnline = new Date();
 		
 	}
 	
