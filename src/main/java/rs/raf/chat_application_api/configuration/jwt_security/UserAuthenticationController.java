@@ -67,6 +67,8 @@ public class UserAuthenticationController {
 			return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
 		}
     	
+    	System.err.println("test");
+    	
     	// If all ok -> generate JWT Token
         if (authentication.isAuthenticated()) {
         	
@@ -83,10 +85,10 @@ public class UserAuthenticationController {
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
     	
     	
-    	User user = new User(userDTO.getFirstname(), userDTO.getLastname(), userDTO.getEmail(), userDTO.getPassword());
+    	User user = new User(userDTO.getFirstname(), userDTO.getLastname(), userDTO.getEmail(), userDTO.getPassword(), userDTO.getFriendList());
     	user = this.userService.save(user);
     	
-    	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());
+    	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getFriendList(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());
     	
     	return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
     }

@@ -45,6 +45,7 @@ public class Runner implements ApplicationRunner {
 		User user2 = new User("Ana", "Peric", "peraperic2@gmail.com", "Test!123!", UserRole.ROLE_ADMIN);
 		User user3 = new User("Mika", "Anic", "peraperic21@gmail.com", "Test!123!", userRoles);
 		
+		user1.addToFriendList(user2);
 		
 		List<User> users = new ArrayList<User>();
 		users.add(user1);

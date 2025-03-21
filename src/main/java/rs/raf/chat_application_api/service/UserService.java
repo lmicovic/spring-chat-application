@@ -48,7 +48,7 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 	@Override
 	public User update(User user, Long id) {
 		
-		user.setPassword(encoder.encode(user.getPassword()));
+//		user.setPassword(encoder.encode(user.getPassword()));
 		return super.update(user, id);
 	}
 	

@@ -3,7 +3,13 @@ package rs.raf.chat_application_api.model;
 import java.io.Serializable; 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.security.core.GrantedAuthority;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -38,11 +44,14 @@ public class UserDTO implements Serializable{
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
 	
+	private Set<User> friendList = new HashSet<User>();
+	
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	private Boolean isOnline;
-	
 	private Date lastOnline;
+	
+	
 	
 	public UserDTO(Long id, String firstname, String lastname, String email, String password) {
 		this.id = id;

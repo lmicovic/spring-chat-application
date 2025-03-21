@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -60,6 +64,10 @@ public class User implements Serializable, UserDetails {
 //	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.")
 	private String password;
 	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_friend_list", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+	private Set<User> friendList = new HashSet<User>();
+	
 	@Column(name = "authorities")
 	private Collection<? extends GrantedAuthority> authorities;
 	
@@ -68,7 +76,6 @@ public class User implements Serializable, UserDetails {
 	
 	@Column(name =  "lastOnline")
 	private Date lastOnline;
-	
 	
 	/**
 	 * Constructor creates User with following predefined atributes:
@@ -114,6 +121,22 @@ public class User implements Serializable, UserDetails {
 		this.lastname = lastname;
 		this.email = email;
 		this.password = password;
+		
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+        this.authorities = authorities;
+        this.isOnline = false;
+        this.lastOnline = new Date();
+	}
+	
+	public User(String firstname, String lastname, String email, String password, Set<User> friendList) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		
+		this.friendList = friendList;
 		
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -173,6 +196,11 @@ public class User implements Serializable, UserDetails {
 		this.isOnline = false;
 		this.lastOnline = new Date();
 		
+	}
+	
+	public Set<User> addToFriendList(User user) {
+		this.friendList.add(user);
+		return this.friendList;
 	}
 	
 	@Override
