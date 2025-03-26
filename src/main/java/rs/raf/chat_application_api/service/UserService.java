@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
+import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
 import rs.raf.chat_application_api.model.ChatMessage;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.repository.ChatMessageRepository;
@@ -118,6 +119,32 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		}
 		
 		return userDetails;
+	}
+	
+	/**
+	 * Adds selected User to logged User friend list.
+	 * @param loggedUserId - logged user that wants to add selected user to friend list
+	 * @param addUserId - user that has to be added to friend list
+	 * @return loggedUser
+	 */
+	public User addUserToFriendList(Long loggedUserId, Long addUserId) throws UserNotFoundException {
+		
+		Optional<User> loggedUser = ((UserRepository)super.repository).findById(loggedUserId);
+		Optional<User> addUser = ((UserRepository)super.repository).findById(addUserId);
+		
+		// Check if Users Exists
+		if(loggedUser.isEmpty() == true) {
+			throw new UserNotFoundException("Logged User not Found. User not found with id: " + loggedUserId);
+		}
+		
+		if(addUser.isEmpty() == true) {
+			throw new UserNotFoundException("Selected User not Found. User not found with id: " + addUserId);
+		}
+		
+		// Add User to Users Friend List
+		loggedUser.get().addToFriendList(addUser.get());
+		
+		return ((UserRepository)super.repository).save(loggedUser.get());
 	}
 	
 	

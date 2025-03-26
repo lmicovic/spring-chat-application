@@ -207,6 +207,30 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 		return new ResponseEntity<User>(findUser, HttpStatus.OK);
 	}
 	
+	/**
+	 * Adds selected user to logged in user friend list.
+	 * @param loggedUserId - user that is currently logged in
+	 * @param addUserId - user that we want to add to friend list
+	 * @return loggedUser
+	 */
+	@PutMapping(value = "/add-to-friend-list/{loggedUserId}/{addUserId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> addUserToFriendList(@PathVariable("loggedUserId") Long loggedUserId, @PathVariable("addUserId") Long addUserId) {
+		
+		try {
+			
+			User addedUser = ((UserService)super.service).addUserToFriendList(loggedUserId, addUserId);
+			
+			// Transform User to UserDTO
+			UserDTO userDto = new UserDTO(addedUser.getId(), addedUser.getFirstname(), addedUser.getLastname(), addedUser.getEmail(), addedUser.getPassword(), addedUser.getFriendList(), addedUser.getAuthorities(), addedUser.getIsOnline(), addedUser.getLastOnline());
+			return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
+			
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
 	@DeleteMapping(value = "/{userId}")
 	@Override
 	public ResponseEntity<?> delete(@PathVariable("userId") Long userId) {
