@@ -77,7 +77,7 @@ public class UserController extends RestControllerImpl<User, UserDTO, Long>{
 			
 		}
 		
-//		user.setIsOnline(true);
+		user.setIsOnline(true);
 		((UserService)super.service).update(user, user.getId());
 		
 		UserDTO userDto = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getFriendList(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());

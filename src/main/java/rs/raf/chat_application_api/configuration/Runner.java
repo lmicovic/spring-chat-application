@@ -1,6 +1,9 @@
 package rs.raf.chat_application_api.configuration;
 
-import java.util.ArrayList;  
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -60,8 +63,32 @@ public class Runner implements ApplicationRunner {
 		
 		
 		
-		ChatMessage message1 = new ChatMessage(user1, user2, "Hello!");
+		ChatMessage message1 = new ChatMessage(user1, user2, "Hello Ana!");
+		ChatMessage message2 = new ChatMessage(user2, user1, "Hello Pera!");
+		
+//		ChatMessage message3 = new ChatMessage(user1, user2, "Hello Ana!");
+//		ChatMessage message4 = new ChatMessage(user2, user1, "Hello Pera!");
+//
+//		ChatMessage message5 = new ChatMessage(user1, user2, "Hello Ana!");
+//		ChatMessage message6 = new ChatMessage(user2, user1, "Hello Pera!");
+//		
+//		ChatMessage message7 = new ChatMessage(user1, user2, "Hello Ana!");
+//		ChatMessage message8 = new ChatMessage(user2, user1, "Hello Pera!");
+        
+        Date newDate = Date.from(LocalDateTime.now().plusMinutes(3).atZone(ZoneId.systemDefault()).toInstant());
+				
+        message2.setTimeCreated(newDate);
+        
 		this.messageService.save(message1);
+		this.messageService.save(message2);
+//		this.messageService.save(message3);
+//		this.messageService.save(message4);
+//		this.messageService.save(message5);
+//		this.messageService.save(message6);
+//		this.messageService.save(message7);
+//		this.messageService.save(message8);
+		
+		
 		
 	}
 	

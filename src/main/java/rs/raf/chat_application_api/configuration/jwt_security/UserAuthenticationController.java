@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.model.UserDTO;
 import rs.raf.chat_application_api.service.UserService;
@@ -67,8 +69,6 @@ public class UserAuthenticationController {
 			return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
 		}
     	
-    	System.err.println("test");
-    	
     	// If all ok -> generate JWT Token
         if (authentication.isAuthenticated()) {
         	
@@ -91,6 +91,28 @@ public class UserAuthenticationController {
     	userDTO = new UserDTO(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getFriendList(), user.getAuthorities(), user.getIsOnline(), user.getLastOnline());
     	
     	return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+    }
+    
+    @PutMapping(value = "/logout", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> logout() {
+    	
+    	System.err.println("test");
+    	
+//    	User user = this.userService.getById(userDto.getId());
+//    	if(user == null) {
+//    		try {
+//				throw new UserNotFoundException("User not found with id: " + userDto.getId());
+//			} catch (UserNotFoundException e) {
+//				e.printStackTrace();
+//				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+//			}
+//    	}
+//    	
+//    	// Set users isOnline to false
+//    	user.setIsOnline(false);
+//    	this.userService.update(user, user.getId());
+    	
+    	return new ResponseEntity<String>(HttpStatus.OK);
     }
     
     @GetMapping(value = "/email-exists/{email}", produces = MediaType.APPLICATION_JSON_VALUE)

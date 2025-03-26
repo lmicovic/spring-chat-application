@@ -85,6 +85,21 @@ public class UserService extends RestServiceImpl<User, Long> implements UserDeta
 		return ((UserRepository)super.repository).existsByEmail(email);
 	}
 	
+	/**
+	 * Checks If user with specific id exists.
+	 * @param userId
+	 * @return boolean
+	 */
+	public boolean existById(Long userId) {
+		
+		Optional<User> user = ((UserRepository)super.repository).findById(userId);
+		if(user.isEmpty() == true) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public User findUserByEmail(String email) {
 		Optional<User> foundUser = ((UserRepository)super.repository).findByEmail(email);
 		if(foundUser.isEmpty()) {

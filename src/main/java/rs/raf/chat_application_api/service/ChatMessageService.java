@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.raf.chat_application_api.model.ChatMessage;
+import rs.raf.chat_application_api.model.ChatMessageDTO;
 import rs.raf.chat_application_api.model.User;
 import rs.raf.chat_application_api.repository.ChatMessageRepository;
 import rs.raf.chat_application_api.repository.UserRepository;
@@ -74,6 +75,20 @@ public class ChatMessageService extends RestServiceImpl<ChatMessage, Long> {
 		List<ChatMessage> userMessages = ((ChatMessageRepository)super.repository).findAllUserMessages(userId);
 		return userMessages;
 	}
+	
+	/**
+	 * Gets all Messages where userSenderId is sender and userReceiverId is receiver
+	 * @param userSenderId
+	 * @param userReceiverId
+	 * @return messages
+	 */
+	public List<ChatMessage> getAllUserSenderAndUserReceiverMessages(Long userSenderId, Long userReceiverId) {
+		
+		List<ChatMessage> messages = ((ChatMessageRepository)super.repository).getAllUserSenderAndUserReceiverMessages(userSenderId, userReceiverId);
+		return messages;
+		
+	}
+	
 	
 	/**
 	 * Checks if User with specific Id is present in Database.

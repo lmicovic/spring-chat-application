@@ -1,6 +1,7 @@
 package rs.raf.chat_application_api.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import rs.raf.chat_application_api.configuration.exception.EntityNotFoundException;
+import rs.raf.chat_application_api.configuration.exception.UserNotFoundException;
 import rs.raf.chat_application_api.model.ChatMessage;
 import rs.raf.chat_application_api.model.ChatMessageDTO;
 import rs.raf.chat_application_api.model.User;
@@ -34,7 +36,7 @@ public class ChatMessageController extends RestControllerImpl<ChatMessage, ChatM
 		super(messageService);
 	}
 	
-	@GetMapping(value = "/sent-message/{userId}")
+	@GetMapping(value = "/sent-message/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findAllUserSentMessages(@PathVariable("userId") Long userId) {
 		
 		User user = this.userService.getById(userId);
@@ -46,7 +48,7 @@ public class ChatMessageController extends RestControllerImpl<ChatMessage, ChatM
 		return new ResponseEntity<List<ChatMessage>>(userSentMessages, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/received-message/{userId}")
+	@GetMapping(value = "/received-message/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findAllUserReceivedMessages(@PathVariable("userId") Long userId) {
 		
 		User user = this.userService.getById(userId);
@@ -58,7 +60,7 @@ public class ChatMessageController extends RestControllerImpl<ChatMessage, ChatM
 		return new ResponseEntity<List<ChatMessage>>(userReceivedMessages, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/all-message/{userId}")
+	@GetMapping(value = "/all-message/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findAllUserMessages(@PathVariable("userId") Long userId) {
 		
 		User user = this.userService.getById(userId);
@@ -68,6 +70,42 @@ public class ChatMessageController extends RestControllerImpl<ChatMessage, ChatM
 		
 		List<ChatMessage> userMessages = ((ChatMessageService)super.service).findAllUserMessages(userId);
 		return new ResponseEntity<List<ChatMessage>>(userMessages, HttpStatus.OK);
+	}
+	
+	/**
+	 * Gets all Messages where userSenderId is sender and userReceiverId is receiver
+	 * @param userSenderId
+	 * @param userReceiverId
+	 * @return messages
+	 */
+	@GetMapping(value = "/all-message/{userSenderId}/{userReceiverId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllUserSenderAndUserReceiverMessages(@PathVariable("userSenderId") Long userSenderId, @PathVariable("userReceiverId") Long userReceiverId) {
+		
+		// Check if User ids exists
+		boolean userSenderExists = this.userService.existById(userSenderId);
+		boolean userReceiverExists = this.userService.existById(userReceiverId);
+		
+		try {
+			if(userSenderExists == false) {
+				throw new UserNotFoundException("userSender not exist with id: " + userSenderId);
+			}
+			if(userReceiverExists == false) {
+				throw new UserNotFoundException("userReceiver not exist with id: " + userSenderId);
+			}	
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		
+		// If Users exist
+		List<ChatMessage> messages = ((ChatMessageService)super.service).getAllUserSenderAndUserReceiverMessages(userSenderId, userReceiverId);
+		List<ChatMessageDTO> messagesDto = new ArrayList<ChatMessageDTO>();
+		for (ChatMessage message: messages) {
+			ChatMessageDTO messageDto = new ChatMessageDTO(message.getId(), message.getUserSender().getId(), message.getUserReceiver().getId(), message.getMessageContent(), message.getTimeCreated());
+			messagesDto.add(messageDto);
+		}
+		
+		return new ResponseEntity<List<ChatMessageDTO>>(messagesDto, HttpStatus.OK);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
